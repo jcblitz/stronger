@@ -2,16 +2,16 @@
 %ul.nav
   - if user_signed_in?
     %li
-      = link_to('Logout', destroy_user_session_path, :method=>'delete')
+      = link_to('Logout', signout_path, :method=>'delete')
   - else
     %li
-      = link_to('Login', new_user_session_path)
+      = link_to('Login', signin_path)
   - if user_signed_in?
     %li
-      = link_to('Edit account', edit_user_registration_path)
+      = link_to('Edit account', edit_user_path(current_user))
     - if current_user.has_role? :admin
       %li
         = link_to('Admin', users_path)
   - else
     %li
-      = link_to('Sign up', new_user_registration_path)
+      = link_to('Sign up', signin_path)
