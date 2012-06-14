@@ -2,7 +2,7 @@
 %ul.nav
   - if user_signed_in?
     %li
-      = link_to('Logout', signout_path, :method=>'delete')
+      = link_to("Logout #{current_user.name}", signout_path, :method=>'delete')
   - else
     %li
       = link_to('Login', signin_path)
