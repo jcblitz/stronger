@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614203323) do
+ActiveRecord::Schema.define(:version => 20120615193225) do
 
   create_table "cycles", :force => true do |t|
     t.integer  "max_bench"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20120614203323) do
     t.integer  "user_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+    t.string   "program_type"
   end
 
   create_table "roles", :force => true do |t|

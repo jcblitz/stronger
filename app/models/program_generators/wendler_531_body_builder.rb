@@ -1,4 +1,4 @@
-class Wendler531BBB
+class Wendler531BodyBuilder
   WEEK_1_1 = 0.65
   WEEK_1_2 = 0.75
   WEEK_1_3 = 0.85
@@ -29,11 +29,11 @@ class Wendler531BBB
   end
 
   def origin_link
-    "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
+    "http://www.mensfitness.com/training/build-muscle/531-variations?page=2"
   end
 
   def generate(deadlift, squat, bench, ohp)
-    mesocycle = Hash.new 
+    mesocycle = Hash.new
 
     mesocycle[:one] = build_one(deadlift, squat, bench, ohp)
     mesocycle[:two] = build_two(deadlift, squat, bench, ohp)

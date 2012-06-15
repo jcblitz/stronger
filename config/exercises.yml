@@ -6,3 +6,11 @@ squat:
   name: Squat
 deadlift:
   name: Deadlift
+chinpup:
+  name: Chinup
+legcurl:
+  name: Leg Curl
+dumbbellrow:
+  name: Dumbbell Row
+hangingraise:
+  name: Hanging Leg Raise

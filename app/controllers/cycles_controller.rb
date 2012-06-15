@@ -1,5 +1,7 @@
 #I shouldn't have to do this
 require_relative "../../app/models/program_generators/wendler_531_bbb"
+require_relative "../../app/models/program_generators/wendler_531_body_builder"
+
 
 class CyclesController < ApplicationController
   # GET /cycles
@@ -17,9 +19,16 @@ class CyclesController < ApplicationController
   # GET /cycles/1.json
   def show
     @cycle = Cycle.find(params[:id])
-    program = Wendler531BBB.new
-    @mesocycle = program.generate(@cycle.max_deadlift, @cycle.max_squat, @cycle.max_bench, @cycle.max_ohp)
 
+    program = nil
+    case @cycle.program_type
+      when "bbb"
+        program = Wendler531BBB.new
+      when "531bb"
+        program = Wendler531BodyBuilder.new
+    end
+
+    @mesocycle = program.generate(@cycle.max_deadlift, @cycle.max_squat, @cycle.max_bench, @cycle.max_ohp)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -50,7 +59,7 @@ class CyclesController < ApplicationController
 
     respond_to do |format|
       if @cycle.save
-        format.html { redirect_to @cycle, notice: 'Cycle was successfully created.' }
+        format.html { redirect_to user_cycle_path(current_user, @cycle), notice: 'Cycle was successfully created.' }
         format.json { render json: @cycle, status: :created, location: @cycle }
       else
         format.html { render action: "new" }

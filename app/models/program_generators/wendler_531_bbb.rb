@@ -1,4 +1,10 @@
+require "yaml"
+require "exercise_util"
+
 class Wendler531BBB
+
+  @config = YAML::load(File.open("#{Rails.root}/config/exercises.yml"))
+
   WEEK_1_1 = 0.65
   WEEK_1_2 = 0.75
   WEEK_1_3 = 0.85
@@ -13,14 +19,14 @@ class Wendler531BBB
 
   WEEK_4 = 0.3
 
-  OHP_LIFT = Exercise.new("Standing Military Press", :ohp)
-  BENCH_LIFT = Exercise.new("Bench Press", :bench)
-  SQUAT_LIFT = Exercise.new("Squat", :squat)
-  DEADLIFT_LIFT = Exercise.new("Deadlift", :deadlift)
-  CHINUP_LIFT = Exercise.new("Chinup", :chinup)
-  HANGING_LEG_LIFT = Exercise.new("Hanging Leg Raises", :leg_raises)
-  DUMBBELL_ROW_LIFT = Exercise.new("Dumbbell Row", :dumbbell_row)
-  LEG_CURL_LIFT = Exercise.new("Leg Curl", :leg_curl)
+  OHP_LIFT = ExerciseUtil.find("ohp")
+  BENCH_LIFT = ExerciseUtil.find("bench")
+  SQUAT_LIFT = ExerciseUtil.find("squat")
+  DEADLIFT_LIFT = ExerciseUtil.find("deadlift")
+  CHINUP_LIFT = ExerciseUtil.find("chinpup")
+  HANGING_LEG_LIFT = ExerciseUtil.find("hangingraise")
+  DUMBBELL_ROW_LIFT = ExerciseUtil.find("dumbbellrow")
+  LEG_CURL_LIFT = ExerciseUtil.find("legcurl")
 
   MAX_TRAINING_FACTOR = 0.90
 
