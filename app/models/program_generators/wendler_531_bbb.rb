@@ -43,7 +43,7 @@ class Wendler531BBB
   def generate(deadlift, squat, bench, ohp)
     mesocycle = Hash.new 
 
-    mesocycle[:one] = build_one(deadlift, squat, bench, ohp)
+    mesocycle[:one] = build_one(deadlift, squat, bench, ohp, 0)
     mesocycle[:two] = build_two(deadlift, squat, bench, ohp)
     mesocycle[:three] = build_three(deadlift, squat, bench, ohp)
     mesocycle[:four] = build_four(deadlift, squat, bench, ohp)
@@ -55,12 +55,12 @@ class Wendler531BBB
 
   end
 
-  def build_one(deadlift, squat, bench, ohp)
+  def build_one(deadlift, squat, bench, ohp, week)
     cycle = Hash.new
 
     ohp_workout = []
     (0..2).each do |count|
-      ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[0][count][1], CYCLE_FACTOR[0][count][0])
+      ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
     end
     5.times do
       ohp_workout << LiftSet.new(CHINUP_LIFT, 0, "10")
@@ -69,7 +69,7 @@ class Wendler531BBB
 
     squat_workout = []
     (0..2).each do |count|
-      squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[0][count][1], CYCLE_FACTOR[0][count][0])
+      squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
     end
     5.times do
       squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
@@ -78,7 +78,7 @@ class Wendler531BBB
 
     bench_workout = []
     (0..2).each do |count|
-      bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[0][count][1], CYCLE_FACTOR[0][count][0])
+      bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
     end
     5.times do
       bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
@@ -87,7 +87,7 @@ class Wendler531BBB
 
     deadlift_workout = []
     (0..2).each do |count|
-      deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[0][count][1], CYCLE_FACTOR[0][count][0])
+      deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
     end
     5.times do
       deadlift_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
