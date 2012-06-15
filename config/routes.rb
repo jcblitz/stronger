@@ -1,9 +1,10 @@
 Stronger::Application.routes.draw do
-  resources :cycles
 
   get "home/index"
 
-  resources :users, :only => [ :show, :edit, :update ]
+  resources :users, :only => [ :show, :edit, :update ] do
+    resources :cycles
+  end
 
   match '/auth/:provider/callback' => 'sessions#create'
 

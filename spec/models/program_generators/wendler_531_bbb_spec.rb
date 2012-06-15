@@ -19,7 +19,7 @@ describe "Wender531BBB" do
         puts cycle_type
 
         workout.each do |lift_set|
-          puts "#{lift_set.lift} | #{lift_set.rounded_weight} | #{lift_set.reps}"
+          puts "#{lift_set.name} | #{lift_set.rounded_weight} | #{lift_set.reps}"
         end
       end
     end

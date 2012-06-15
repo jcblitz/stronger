@@ -1,4 +1,4 @@
-= simple_form_for(@cycle) do |f|
+= simple_form_for([current_user, @cycle]) do |f|
   = f.error_notification
 
   .form-inputs
@@ -6,7 +6,6 @@
     = f.input :max_squat
     = f.input :max_deadlift
     = f.input :max_ohp
-    = f.input :user_id
 
   .form-actions
     = f.button :submit

@@ -1,4 +1,5 @@
-require_relative "../models/program_generators/wendler_531_bbb"
+#I shouldn't have to do this
+require_relative "../../app/models/program_generators/wendler_531_bbb"
 
 class CyclesController < ApplicationController
   # GET /cycles
@@ -65,7 +66,7 @@ class CyclesController < ApplicationController
 
     respond_to do |format|
       if @cycle.update_attributes(params[:cycle])
-        format.html { redirect_to @cycle, notice: 'Cycle was successfully updated.' }
+        format.html { redirect_to user_cycle_path(current_user, @cycle), notice: 'Cycle was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

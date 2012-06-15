@@ -7,6 +7,10 @@ class LiftSet
     @reps = reps
   end
 
+  def name
+    self.lift.name
+  end
+
   def rounded_weight
     up = round_up
     down = round_down

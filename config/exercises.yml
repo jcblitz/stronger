@@ -1,0 +1,8 @@
+bench:
+  name: Bench Press
+ohp:
+  name: Overhead Press
+squat:
+  name: Squat
+deadlift:
+  name: Deadlift

@@ -26,12 +26,12 @@
             %ul
               -workout.each do |lift_set|
                 %li
-                  %b= lift_set.lift
+                  %b= lift_set.name
                   = lift_set.rounded_weight
                   = lift_set.reps
 
 
 
-= link_to 'Edit', edit_cycle_path(@cycle)
+= link_to 'Edit', edit_user_cycle_path(@cycle)
 \|
-= link_to 'Back', cycles_path
+= link_to 'Back', user_cycles_path
