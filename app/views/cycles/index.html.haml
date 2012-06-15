@@ -1,0 +1,27 @@
+%h1 Listing cycles
+
+%table
+  %tr
+    %th Max bench
+    %th Max squat
+    %th Max deadlift
+    %th Max ohp
+    %th User
+    %th
+    %th
+    %th
+
+  - @cycles.each do |cycle|
+    %tr
+      %td= cycle.max_bench
+      %td= cycle.max_squat
+      %td= cycle.max_deadlift
+      %td= cycle.max_ohp
+      %td= cycle.user.name
+      %td= link_to 'Show', cycle
+      %td= link_to 'Edit', edit_cycle_path(cycle)
+      %td= link_to 'Destroy', cycle, :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Cycle', new_cycle_path

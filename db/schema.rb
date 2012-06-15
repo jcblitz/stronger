@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120614140551) do
+ActiveRecord::Schema.define(:version => 20120614203323) do
+
+  create_table "cycles", :force => true do |t|
+    t.integer  "max_bench"
+    t.integer  "max_squat"
+    t.integer  "max_deadlift"
+    t.integer  "max_ohp"
+    t.integer  "user_id"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "roles", :force => true do |t|
     t.string   "name"

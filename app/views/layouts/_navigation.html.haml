@@ -1,5 +1,7 @@
 = link_to "Stronger", root_path, :class => 'brand'
 %ul.nav
+  %li
+    = link_to("Cycles", cycles_path)
   - if user_signed_in?
     %li
       = link_to("Logout #{current_user.name}", signout_path, :method=>'delete')

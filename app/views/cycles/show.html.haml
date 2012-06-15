@@ -1,0 +1,37 @@
+%p
+  %b Max bench:
+  = @cycle.max_bench
+%p
+  %b Max squat:
+  = @cycle.max_squat
+%p
+  %b Max deadlift:
+  = @cycle.max_deadlift
+%p
+  %b Max ohp:
+  = @cycle.max_ohp
+%p
+  %b User:
+  = @cycle.user_id
+
+%ul
+  - @mesocycle.each do |cycle_key, cycle|
+    %li
+      %h3
+        = cycle_key
+      %ul
+        -cycle.each do |workout_key, workout|
+          %li
+            %h4= workout_key
+            %ul
+              -workout.each do |lift_set|
+                %li
+                  %b= lift_set.lift
+                  = lift_set.rounded_weight
+                  = lift_set.reps
+
+
+
+= link_to 'Edit', edit_cycle_path(@cycle)
+\|
+= link_to 'Back', cycles_path

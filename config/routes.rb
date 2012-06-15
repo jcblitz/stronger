@@ -1,4 +1,6 @@
 Stronger::Application.routes.draw do
+  resources :cycles
+
   get "home/index"
 
   resources :users, :only => [ :show, :edit, :update ]

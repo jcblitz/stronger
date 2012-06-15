@@ -53,3 +53,4 @@ gem "sass", ">= 3.1.12"
 gem "simple_form"
 gem "capybara", :group => [:development, :test]
 gem "heroku", :group => :development
+gem "database_cleaner", :group => :test
