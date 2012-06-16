@@ -14,3 +14,29 @@ dumbbellrow:
   name: Dumbbell Row
 hangingraise:
   name: Hanging Leg Raise
+uprightrow:
+  name: Barbell Upright Row
+dumbbellohp:
+  name: Dumbbell Overhead Press
+bentdumbbellraise:
+  name: Bentover Dumbbell Raises
+dumbbellcurl:
+  name: Dumbbell Curl
+backextension:
+  name: Back Extension
+abwheel:
+  name: Ab Wheel
+dumbbellbench:
+  name: Dumbbell Bench Press
+dip:
+  name: Dip
+dumbbellfly:
+  name: Dumbbell Fly
+triceppushdown:
+  name: Tricep Pushdown
+legpress:
+  name: Leg Press
+legext:
+  name: Leg Extension
+situp:
+  name: Sit Up

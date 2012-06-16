@@ -1,232 +1,123 @@
+require "yaml"
+require "exercise_util"
+
 class Wendler531BodyBuilder
-  WEEK_1_1 = 0.65
-  WEEK_1_2 = 0.75
-  WEEK_1_3 = 0.85
 
-  WEEK_2_1 = 0.70
-  WEEK_2_2 = 0.80
-  WEEK_2_3 = 0.90
+    @config = YAML::load(File.open("#{Rails.root}/config/exercises.yml"))
 
-  WEEK_3_1 = 0.75
-  WEEK_3_2 = 0.85
-  WEEK_3_3 = 0.95
+    CYCLE_FACTOR = [
+        [
+            ["5",0.65],
+            ["5",0.75],
+            ["5+",0.85]
+        ],[
+            ["3",0.70],
+            ["3",0.80],
+            ["3+",0.90]
+        ],[
+            ["5",0.75],
+            ["3",0.85],
+            ["1+",0.95]
+        ],[
+            ["5",0.40],
+            ["5",0.50],
+            ["5",0.60]
+        ]
+    ]
 
-  WEEK_4 = 0.3
+    OHP_LIFT = ExerciseUtil.find("ohp")
+    BENCH_LIFT = ExerciseUtil.find("bench")
+    SQUAT_LIFT = ExerciseUtil.find("squat")
+    DEADLIFT_LIFT = ExerciseUtil.find("deadlift")
+    CHINUP_LIFT = ExerciseUtil.find("chinpup")
+    HANGING_LEG_LIFT = ExerciseUtil.find("hangingraise")
+    DUMBBELL_ROW_LIFT = ExerciseUtil.find("dumbbellrow")
+    LEG_CURL_LIFT = ExerciseUtil.find("legcurl")
 
-  OHP_LIFT = Exercise.new("Standing Military Press", :ohp)
-  BENCH_LIFT = Exercise.new("Bench Press", :bench)
-  SQUAT_LIFT = Exercise.new("Squat", :squat)
-  DEADLIFT_LIFT = Exercise.new("Deadlift", :deadlift)
-  CHINUP_LIFT = Exercise.new("Chinup", :chinup)
-  HANGING_LEG_LIFT = Exercise.new("Hanging Leg Raises", :leg_raises)
-  DUMBBELL_ROW_LIFT = Exercise.new("Dumbbell Row", :dumbbell_row)
-  LEG_CURL_LIFT = Exercise.new("Leg Curl", :leg_curl)
+    UPRIGHTROW = ExerciseUtil.find("uprightrow")
+    DUMBBELLOHP = ExerciseUtil.find("dumbbellohp")
+    BENTDUMBBELLRAISE = ExerciseUtil.find("bentdumbbellraise")
+    DUMBBELLCURL = ExerciseUtil.find("dumbbellcurl")
+    BACKEXTENSION = ExerciseUtil.find("backextension")
+    ABWHEEL = ExerciseUtil.find("abwheel")
+    DUMBBELLBENCH = ExerciseUtil.find("dumbbellbench")
+    DIP = ExerciseUtil.find("dip")
+    DUMBBELLFLY = ExerciseUtil.find("dumbbellfly")
+    TRICEPPUSHDOWN = ExerciseUtil.find("triceppushdown")
+    LEGPRESS = ExerciseUtil.find("legpress")
+    LEGEXT = ExerciseUtil.find("legext")
+    SITUP = ExerciseUtil.find("situp")
 
-  MAX_TRAINING_FACTOR = 0.90
+    MAX_TRAINING_FACTOR = 0.90
 
-  def description
-    "5/3/1: The Simplest and Most Effective Training System for Raw Strength"
+    def description
+      "5/3/1: The Simplest and Most Effective Training System for Raw Strength"
+    end
+
+    def origin_link
+      "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
+    end
+
+    def generate(deadlift, squat, bench, ohp)
+      mesocycle = Hash.new
+
+      mesocycle[:one] = build_one(deadlift, squat, bench, ohp, 0)
+      mesocycle[:two] = build_one(deadlift, squat, bench, ohp, 1)
+      mesocycle[:three] = build_one(deadlift, squat, bench, ohp, 2)
+      mesocycle[:four] = build_one(deadlift, squat, bench, ohp, 3)
+
+      return mesocycle
+    end
+
+
+    def build_one(deadlift, squat, bench, ohp, week)
+      cycle = Hash.new
+
+      ohp_workout = []
+      (0..2).each do |count|
+        ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
+      end
+      4.times do
+        ohp_workout << LiftSet.new(UPRIGHTROW, 0, "10")
+      end
+      4.times do
+        ohp_workout << LiftSet.new(DUMBBELLOHP, 0, "12")
+      end
+      4.times do
+        ohp_workout << LiftSet.new(BENTDUMBBELLRAISE, 0, "15")
+      end
+      4.times do
+        ohp_workout << LiftSet.new(DUMBBELLCURL, 0, "12")
+      end
+      cycle[:ohp] = ohp_workout
+
+      squat_workout = []
+      (0..2).each do |count|
+        squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
+      end
+      5.times do
+        squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
+      end
+      cycle[:squat] = squat_workout
+
+      bench_workout = []
+      (0..2).each do |count|
+        bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
+      end
+      5.times do
+        bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
+      end
+      cycle[:bench] = bench_workout
+
+      deadlift_workout = []
+      (0..2).each do |count|
+        deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
+      end
+      5.times do
+        deadlift_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
+      end
+      cycle[:deadlift] = deadlift_workout
+
+      return cycle
+    end
   end
-
-  def origin_link
-    "http://www.mensfitness.com/training/build-muscle/531-variations?page=2"
-  end
-
-  def generate(deadlift, squat, bench, ohp)
-    mesocycle = Hash.new
-
-    mesocycle[:one] = build_one(deadlift, squat, bench, ohp)
-    mesocycle[:two] = build_two(deadlift, squat, bench, ohp)
-    mesocycle[:three] = build_three(deadlift, squat, bench, ohp)
-    mesocycle[:four] = build_four(deadlift, squat, bench, ohp)
-
-    return mesocycle
-  end
-
-  def build_one(deadlift, squat, bench, ohp)
-    cycle = Hash.new
-
-    ohp_workout = []
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_1_1, "5")
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_1_2, "5")
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_1_3, "5+")
-    5.times do
-      ohp_workout << LiftSet.new(CHINUP_LIFT, 0, "10")
-    end
-
-    cycle[:ohp] = ohp_workout
-
-    squat_workout = []
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_1_1, "5")
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_1_2, "5")
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_1_3, "5+")
-    5.times do
-      squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-
-    cycle[:squat] = squat_workout
-
-    bench_workout = []
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_1_1, "5")
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_1_2, "5")
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_1_3, "5+")
-    5.times do
-      bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
-    end
-
-    cycle[:bench] = bench_workout
-
-    deadlift_workout = []
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_1_1, "5")
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_1_2, "5")
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_1_3, "5+")
-    5.times do
-      deadlift_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-
-    cycle[:deadlift] = deadlift_workout
-
-    return cycle
-
-
-  end
-
-  def build_two(deadlift, squat, bench, ohp)
-    cycle = Hash.new
-
-    ohp_workout = []
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_2_1, "3")
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_2_2, "3")
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_2_3, "3+")
-    5.times do
-      ohp_workout << LiftSet.new(CHINUP_LIFT, 0, "10")
-    end
-
-    cycle[:ohp] = ohp_workout
-
-    squat_workout = []
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_2_1, "3")
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_2_2, "3")
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_2_3, "3+")
-    5.times do
-      squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-
-    cycle[:squat] = squat_workout
-
-    bench_workout = []
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_2_1, "3")
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_2_2, "3")
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_2_3, "3+")
-    5.times do
-      bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
-    end
-
-    cycle[:bench] = bench_workout
-
-    deadlift_workout = []
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_2_1, "3")
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_2_2, "3")
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_2_3, "3+")
-    5.times do
-      deadlift_workout << LiftSet.new(HANGING_LEG_LIFT, 0, "10")
-    end
-
-    cycle[:deadlift] = deadlift_workout
-
-    return cycle
-  end
-
-  def build_three(deadlift, squat, bench, ohp)
-    cycle = Hash.new
-
-    ohp_workout = []
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_3_1, "5")
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_3_2, "3")
-    ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_3_3, "1+")
-    5.times do
-      ohp_workout << LiftSet.new(CHINUP_LIFT, 0, "10")
-    end
-
-    cycle[:ohp] = ohp_workout
-
-    squat_workout = []
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_3_1, "5")
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_3_2, "3")
-    squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_3_3, "1+")
-    5.times do
-      squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-
-    cycle[:squat] = squat_workout
-
-    bench_workout = []
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_3_1, "5")
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_3_2, "3")
-    bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_3_3, "1+")
-    5.times do
-      bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
-    end
-
-    cycle[:bench] = bench_workout
-
-    deadlift_workout = []
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_3_1, "5")
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_3_2, "3")
-    deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_3_3, "1+")
-    5.times do
-      deadlift_workout << LiftSet.new(HANGING_LEG_LIFT, 0, "10")
-    end
-
-    cycle[:deadlift] = deadlift_workout
-
-    return cycle
-  end
-
-  def build_four(deadlift, squat, bench, ohp)
-    cycle = Hash.new
-
-    ohp_workout = []
-    5.times do
-      ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * WEEK_4, "10")
-    end
-    5.times do
-      ohp_workout << LiftSet.new(CHINUP_LIFT, 0, "10")
-    end
-
-    cycle[:ohp] = ohp_workout
-
-    squat_workout = []
-    5.times do
-      squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * WEEK_4, "10")
-    end
-    5.times do
-      squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-
-    cycle[:squat] = squat_workout
-
-    bench_workout = []
-    5.times do
-      bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * WEEK_4, "10")
-    end
-    5.times do
-      bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
-    end
-
-    cycle[:bench] = bench_workout
-
-    deadlift_workout = []
-    5.times do
-      deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * WEEK_4, "10")
-    end
-    5.times do
-      deadlift_workout << LiftSet.new(HANGING_LEG_LIFT, 0, "10")
-    end
-
-    cycle[:deadlift] = deadlift_workout
-
-    return cycle
-  end
-
-end
