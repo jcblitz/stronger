@@ -14,21 +14,15 @@
   %b Program Type:
   = @cycle.program_type
 
-%ul
-  - @mesocycle.each do |cycle_key, cycle|
-    %li
-      %h3
-        = cycle_key
-      %ul
-        -cycle.each do |workout_key, workout|
-          %li
-            %h4= workout_key
-            %ul
-              -workout.each do |lift_set|
-                %li
-                  %b= lift_set.name
-                  = lift_set.rounded_weight
-                  = lift_set.reps
+%div.row
+  - @cycle.workouts.each do |workout|
+    %div.span3
+      %h2= workout.title
+      - workout.lift_sets.each do |lift_set|
+        %p
+          = lift_set.reps
+          = lift_set.exercise.name unless lift_set.exercise.nil?
+          = lift_set.weight unless lift_set.weight == 0
 
 
 

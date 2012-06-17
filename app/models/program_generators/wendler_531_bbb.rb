@@ -1,20 +1,22 @@
 require "yaml"
 require "exercise_util"
 
-class Wendler531BBB
-
-  @config = YAML::load(File.open("#{Rails.root}/config/exercises.yml"))
+class Wendler531Bbb
+  attr_accessor :cycle
 
   CYCLE_FACTOR = [[["5",0.65],["5",0.75],["5+",0.85]],[["3",0.70],["3",0.80],["3+",0.90]],[["5",0.75],["3",0.85],["1+",0.95]],[["5",0.40],["5",0.50],["5",0.60]]]
+  CYCLE_STAGE_REPS = 0
+  CYCLE_STAGE_FACTOR = 1
 
-  OHP_LIFT = ExerciseUtil.find("ohp")
-  BENCH_LIFT = ExerciseUtil.find("bench")
-  SQUAT_LIFT = ExerciseUtil.find("squat")
-  DEADLIFT_LIFT = ExerciseUtil.find("deadlift")
-  CHINUP_LIFT = ExerciseUtil.find("chinpup")
-  HANGING_LEG_LIFT = ExerciseUtil.find("hangingraise")
-  DUMBBELL_ROW_LIFT = ExerciseUtil.find("dumbbellrow")
-  LEG_CURL_LIFT = ExerciseUtil.find("legcurl")
+  BENCH_EXERCISE = Exercise.where(key: "bench").first
+  DEADLIFT_EXERCISE = Exercise.where(key: "deadlift").first
+  SQUAT_EXERCISE = Exercise.where(key: "squat").first
+  OHP_EXERCISE = Exercise.where(key: "ohp").first
+
+  DUMBBELL_ROW_EXERCISE = Exercise.where(key: "dumbbellrow").first
+  HLR_EXERCISE = Exercise.where(key: "hanginglegraise").first
+  CHIN_EXERCISE = Exercise.where(key: "chinup").first
+  LEGCURL_EXERCISE = Exercise.where(key: "legcurl").first
 
   MAX_TRAINING_FACTOR = 0.90
 
@@ -26,57 +28,131 @@ class Wendler531BBB
     "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
   end
 
-  def generate(deadlift, squat, bench, ohp)
-    mesocycle = Hash.new 
+  def initialize(cycle)
+    @cycle = cycle
+  end
 
-    mesocycle[:one] = build_one(deadlift, squat, bench, ohp, 0)
-    mesocycle[:two] = build_one(deadlift, squat, bench, ohp, 1)
-    mesocycle[:three] = build_one(deadlift, squat, bench, ohp, 2)
-    mesocycle[:four] = build_one(deadlift, squat, bench, ohp, 3)
+  def generate
 
-    return mesocycle
+    (0..3).each do |micro_cycle|
+      @cycle.workouts << build_bench(micro_cycle)
+      @cycle.workouts << build_ohp(micro_cycle)
+      @cycle.workouts << build_squat(micro_cycle)
+      @cycle.workouts << build_deadlift(micro_cycle)
+    end
+
+    @cycle.save
+
   end
 
 
-  def build_one(deadlift, squat, bench, ohp, week)
-    cycle = Hash.new
+  def build_bench(week)
 
-    ohp_workout = []
-    (0..2).each do |count|
-      ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-    end
-    5.times do
-      ohp_workout << LiftSet.new(CHINUP_LIFT, 0, "10")
-    end
-    cycle[:ohp] = ohp_workout
+    workout = Workout.new(title: "Bench Press")
+    workout.cycle = @cycle
 
-    squat_workout = []
-    (0..2).each do |count|
-      squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-    end
-    5.times do
-      squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-    cycle[:squat] = squat_workout
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
 
-    bench_workout = []
-    (0..2).each do |count|
-      bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-    end
-    5.times do
-      bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
-    end
-    cycle[:bench] = bench_workout
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_bench * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = BENCH_EXERCISE
+      ls.save
 
-    deadlift_workout = []
-    (0..2).each do |count|
-      deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
+      workout.lift_sets << ls
     end
-    5.times do
-      deadlift_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-    end
-    cycle[:deadlift] = deadlift_workout
 
-    return cycle
+    (0..4).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = DUMBBELL_ROW_EXERCISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
   end
+
+  def build_ohp(week)
+
+    bench_workout = Workout.new(title: "Overhead Press")
+    bench_workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_ohp * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = OHP_EXERCISE
+      ls.save
+
+      bench_workout.lift_sets << ls
+    end
+
+    (0..4).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = CHIN_EXERCISE
+      ls.save
+      bench_workout.lift_sets << ls
+    end
+
+    bench_workout.save
+    return bench_workout
+
+  end
+
+  def build_deadlift(week)
+
+    workout = Workout.new(title: "Deadlift")
+    workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_deadlift * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = DEADLIFT_EXERCISE
+      ls.save
+
+      workout.lift_sets << ls
+    end
+
+    (0..4).each do |sets|
+      ls = LiftSet.new(reps: 15, weight: 0)
+      ls.exercise = HLR_EXERCISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
+  end
+
+  def build_squat(week)
+
+    workout = Workout.new(title: "Squat")
+    workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_squat * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = SQUAT_EXERCISE
+      ls.save
+
+      workout.lift_sets << ls
+    end
+
+    (0..4).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = HLR_EXERCISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
+  end
+
+
 end

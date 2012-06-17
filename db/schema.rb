@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120615193225) do
+ActiveRecord::Schema.define(:version => 20120617020127) do
 
   create_table "cycles", :force => true do |t|
     t.integer  "max_bench"
@@ -22,6 +22,22 @@ ActiveRecord::Schema.define(:version => 20120615193225) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.string   "program_type"
+  end
+
+  create_table "exercises", :force => true do |t|
+    t.string   "key"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "lift_sets", :force => true do |t|
+    t.integer  "workout_id"
+    t.integer  "exercise_id"
+    t.string   "reps"
+    t.integer  "weight"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "roles", :force => true do |t|
@@ -50,5 +66,14 @@ ActiveRecord::Schema.define(:version => 20120615193225) do
   end
 
   add_index "users_roles", ["user_id", "role_id"], :name => "index_users_roles_on_user_id_and_role_id"
+
+  create_table "workouts", :force => true do |t|
+    t.integer  "cycle_id"
+    t.string   "title"
+    t.boolean  "completed"
+    t.datetime "completed_date"
+    t.datetime "created_at",     :null => false
+    t.datetime "updated_at",     :null => false
+  end
 
 end

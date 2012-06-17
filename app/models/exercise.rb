@@ -1,10 +1,5 @@
-class Exercise
-  attr_accessor :name, :key, :description
-
-  def initialize(name, key, description = "")
-    @name = name
-    @key = key
-    @description = description
-  end
-
+class Exercise < ActiveRecord::Base
+  validates_uniqueness_of :key
+  validates_presence_of :key
+  validates_presence_of :name
 end

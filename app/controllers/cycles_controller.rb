@@ -1,7 +1,6 @@
 #I shouldn't have to do this
-require_relative "../../app/models/program_generators/wendler_531_bbb"
-require_relative "../../app/models/program_generators/wendler_531_body_builder"
-
+require "wendler_531_bbb"
+require "wendler_531_body_builder"
 
 class CyclesController < ApplicationController
   # GET /cycles
@@ -19,16 +18,6 @@ class CyclesController < ApplicationController
   # GET /cycles/1.json
   def show
     @cycle = Cycle.find(params[:id])
-
-    program = nil
-    case @cycle.program_type
-      when "bbb"
-        program = Wendler531BBB.new
-      when "531bb"
-        program = Wendler531BodyBuilder.new
-    end
-
-    @mesocycle = program.generate(@cycle.max_deadlift, @cycle.max_squat, @cycle.max_bench, @cycle.max_ohp)
 
     respond_to do |format|
       format.html # show.html.erb
@@ -56,9 +45,22 @@ class CyclesController < ApplicationController
   # POST /cycles.json
   def create
     @cycle = Cycle.new(params[:cycle])
+    @cycle.user = current_user
 
     respond_to do |format|
       if @cycle.save
+
+        program = nil
+        case @cycle.program_type
+          when "bbb"
+            program = Wendler531Bbb.new(@cycle)
+          when "531bb"
+            program = Wendler531BodyBuilder.new(@cycle)
+        end
+
+        program.generate
+
+
         format.html { redirect_to user_cycle_path(current_user, @cycle), notice: 'Cycle was successfully created.' }
         format.json { render json: @cycle, status: :created, location: @cycle }
       else
@@ -75,6 +77,19 @@ class CyclesController < ApplicationController
 
     respond_to do |format|
       if @cycle.update_attributes(params[:cycle])
+
+        @cycle.workouts.delete_all
+
+        program = nil
+        case @cycle.program_type
+          when "bbb"
+            program = Wendler531Bbb.new(@cycle)
+          when "531bb"
+            program = Wendler531BodyBuilder.new(@cycle)
+        end
+
+        program.generate
+
         format.html { redirect_to user_cycle_path(current_user, @cycle), notice: 'Cycle was successfully updated.' }
         format.json { head :no_content }
       else
@@ -91,7 +106,7 @@ class CyclesController < ApplicationController
     @cycle.destroy
 
     respond_to do |format|
-      format.html { redirect_to cycles_url }
+      format.html { redirect_to user_cycles_path(current_user) }
       format.json { head :no_content }
     end
   end

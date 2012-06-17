@@ -1,123 +1,254 @@
-require "yaml"
-require "exercise_util"
-
 class Wendler531BodyBuilder
+  attr_accessor :cycle
 
-    @config = YAML::load(File.open("#{Rails.root}/config/exercises.yml"))
+  CYCLE_FACTOR = [[["5",0.65],["5",0.75],["5+",0.85]],[["3",0.70],["3",0.80],["3+",0.90]],[["5",0.75],["3",0.85],["1+",0.95]],[["5",0.40],["5",0.50],["5",0.60]]]
+  CYCLE_STAGE_REPS = 0
+  CYCLE_STAGE_FACTOR = 1
 
-    CYCLE_FACTOR = [
-        [
-            ["5",0.65],
-            ["5",0.75],
-            ["5+",0.85]
-        ],[
-            ["3",0.70],
-            ["3",0.80],
-            ["3+",0.90]
-        ],[
-            ["5",0.75],
-            ["3",0.85],
-            ["1+",0.95]
-        ],[
-            ["5",0.40],
-            ["5",0.50],
-            ["5",0.60]
-        ]
-    ]
+  BENCH_EXERCISE = Exercise.where(key: "bench").first
+  DEADLIFT_EXERCISE = Exercise.where(key: "deadlift").first
+  SQUAT_EXERCISE = Exercise.where(key: "squat").first
+  OHP_EXERCISE = Exercise.where(key: "ohp").first
 
-    OHP_LIFT = ExerciseUtil.find("ohp")
-    BENCH_LIFT = ExerciseUtil.find("bench")
-    SQUAT_LIFT = ExerciseUtil.find("squat")
-    DEADLIFT_LIFT = ExerciseUtil.find("deadlift")
-    CHINUP_LIFT = ExerciseUtil.find("chinpup")
-    HANGING_LEG_LIFT = ExerciseUtil.find("hangingraise")
-    DUMBBELL_ROW_LIFT = ExerciseUtil.find("dumbbellrow")
-    LEG_CURL_LIFT = ExerciseUtil.find("legcurl")
+  DUMBBELL_ROW_EXERCISE = Exercise.where(key: "dumbbellrow").first
+  HLR_EXERCISE = Exercise.where(key: "hanginglegraise").first
+  CHIN_EXERCISE = Exercise.where(key: "chinup").first
+  LEGCURL_EXERCISE = Exercise.where(key: "legcurl").first
 
-    UPRIGHTROW = ExerciseUtil.find("uprightrow")
-    DUMBBELLOHP = ExerciseUtil.find("dumbbellohp")
-    BENTDUMBBELLRAISE = ExerciseUtil.find("bentdumbbellraise")
-    DUMBBELLCURL = ExerciseUtil.find("dumbbellcurl")
-    BACKEXTENSION = ExerciseUtil.find("backextension")
-    ABWHEEL = ExerciseUtil.find("abwheel")
-    DUMBBELLBENCH = ExerciseUtil.find("dumbbellbench")
-    DIP = ExerciseUtil.find("dip")
-    DUMBBELLFLY = ExerciseUtil.find("dumbbellfly")
-    TRICEPPUSHDOWN = ExerciseUtil.find("triceppushdown")
-    LEGPRESS = ExerciseUtil.find("legpress")
-    LEGEXT = ExerciseUtil.find("legext")
-    SITUP = ExerciseUtil.find("situp")
+  UPRIGHT_ROW_EXERCISE = Exercise.where(key: "dbuprightrow").first
+  DB_MILITARY_PRESS = Exercise.where(key: "dbmilitarypress").first
+  DB_BENT_RAISE = Exercise.where(key: "bentdbraise").first
+  DB_CURL = Exercise.where(key: "dbcurl").first
+  DB_ROW = Exercise.where(key: "dbrow").first
+  BACK_EXTENSION = Exercise.where(key: "backextension").first
+  AB_WHEEL = Exercise.where(key: "abwheel").first
+  DB_BENCH_PRESS = Exercise.where(key: "dbbenchpress").first
+  DIP = Exercise.where(key: "dip").first
+  DUMBBELL_FLY = Exercise.where(key: "dbfly").first
+  TRICEP_PUSHDOWN = Exercise.where(key: "triceppushdown").first
+  LEG_PRESS = Exercise.where(key: "legpress").first
+  LEG_EXTENSION = Exercise.where(key: "legextension").first
+  SIT_UP = Exercise.where(key: "situp").first
 
-    MAX_TRAINING_FACTOR = 0.90
+  MAX_TRAINING_FACTOR = 0.90
 
-    def description
-      "5/3/1: The Simplest and Most Effective Training System for Raw Strength"
-    end
-
-    def origin_link
-      "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
-    end
-
-    def generate(deadlift, squat, bench, ohp)
-      mesocycle = Hash.new
-
-      mesocycle[:one] = build_one(deadlift, squat, bench, ohp, 0)
-      mesocycle[:two] = build_one(deadlift, squat, bench, ohp, 1)
-      mesocycle[:three] = build_one(deadlift, squat, bench, ohp, 2)
-      mesocycle[:four] = build_one(deadlift, squat, bench, ohp, 3)
-
-      return mesocycle
-    end
-
-
-    def build_one(deadlift, squat, bench, ohp, week)
-      cycle = Hash.new
-
-      ohp_workout = []
-      (0..2).each do |count|
-        ohp_workout << LiftSet.new(OHP_LIFT, (ohp * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-      end
-      4.times do
-        ohp_workout << LiftSet.new(UPRIGHTROW, 0, "10")
-      end
-      4.times do
-        ohp_workout << LiftSet.new(DUMBBELLOHP, 0, "12")
-      end
-      4.times do
-        ohp_workout << LiftSet.new(BENTDUMBBELLRAISE, 0, "15")
-      end
-      4.times do
-        ohp_workout << LiftSet.new(DUMBBELLCURL, 0, "12")
-      end
-      cycle[:ohp] = ohp_workout
-
-      squat_workout = []
-      (0..2).each do |count|
-        squat_workout << LiftSet.new(SQUAT_LIFT, (squat * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-      end
-      5.times do
-        squat_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-      end
-      cycle[:squat] = squat_workout
-
-      bench_workout = []
-      (0..2).each do |count|
-        bench_workout << LiftSet.new(BENCH_LIFT, (bench * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-      end
-      5.times do
-        bench_workout << LiftSet.new(DUMBBELL_ROW_LIFT, 0, "10")
-      end
-      cycle[:bench] = bench_workout
-
-      deadlift_workout = []
-      (0..2).each do |count|
-        deadlift_workout << LiftSet.new(DEADLIFT_LIFT, (deadlift * MAX_TRAINING_FACTOR) * CYCLE_FACTOR[week][count][1], CYCLE_FACTOR[week][count][0])
-      end
-      5.times do
-        deadlift_workout << LiftSet.new(LEG_CURL_LIFT, 0, "10")
-      end
-      cycle[:deadlift] = deadlift_workout
-
-      return cycle
-    end
+  def description
+    "5/3/1: The Simplest and Most Effective Training System for Raw Strength"
   end
+
+  def origin_link
+    "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
+  end
+
+  def initialize(cycle)
+    @cycle = cycle
+  end
+
+  def generate
+
+    (0..3).each do |micro_cycle|
+      @cycle.workouts << build_bench(micro_cycle)
+      @cycle.workouts << build_ohp(micro_cycle)
+      @cycle.workouts << build_squat(micro_cycle)
+      @cycle.workouts << build_deadlift(micro_cycle)
+    end
+
+    @cycle.save
+
+  end
+
+
+  def build_bench(week)
+
+    workout = Workout.new(title: "Bench Press")
+    workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_bench * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = BENCH_EXERCISE
+      ls.save
+
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = DB_BENCH_PRESS
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = DIP
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = DUMBBELL_FLY
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 12, weight: 0)
+      ls.exercise = TRICEP_PUSHDOWN
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
+  end
+
+  def build_ohp(week)
+
+    workout = Workout.new(title: "Overhead Press")
+    workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_ohp * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = OHP_EXERCISE
+      ls.save
+
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = UPRIGHT_ROW_EXERCISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 12, weight: 0)
+      ls.exercise = DB_MILITARY_PRESS
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 15, weight: 0)
+      ls.exercise = DB_BENT_RAISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 12, weight: 0)
+      ls.exercise = DB_CURL
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
+  end
+
+  def build_deadlift(week)
+
+    workout = Workout.new(title: "Deadlift")
+    workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_deadlift * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = DEADLIFT_EXERCISE
+      ls.save
+
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 10, weight: 0)
+      ls.exercise = CHIN_EXERCISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 15, weight: 0)
+      ls.exercise = DB_ROW
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 25, weight: 0)
+      ls.exercise = BACK_EXTENSION
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 15, weight: 0)
+      ls.exercise = AB_WHEEL
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
+  end
+
+  def build_squat(week)
+
+    workout = Workout.new(title: "Squat")
+    workout.cycle = @cycle
+
+    (0..2).each do |stage|
+      cycle_stage_config = CYCLE_FACTOR[week][stage]
+
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_squat * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls.exercise = SQUAT_EXERCISE
+      ls.save
+
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 12, weight: 0)
+      ls.exercise = LEG_PRESS
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 12, weight: 0)
+      ls.exercise = LEG_EXTENSION
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 12, weight: 0)
+      ls.exercise = LEGCURL_EXERCISE
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    (0..3).each do |sets|
+      ls = LiftSet.new(reps: 25, weight: 0)
+      ls.exercise = SIT_UP
+      ls.save
+      workout.lift_sets << ls
+    end
+
+    workout.save
+    return workout
+
+  end
+
+
+end
