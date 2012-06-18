@@ -53,7 +53,7 @@ class Wendler531BodyBuilder
       @cycle.workouts << build_deadlift(micro_cycle)
     end
 
-    @cycle.save
+    return @cycle
 
   end
 
@@ -68,7 +68,7 @@ class Wendler531BodyBuilder
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_bench * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = BENCH_EXERCISE
-      ls.save
+      
 
       workout.lift_sets << ls
     end
@@ -76,32 +76,32 @@ class Wendler531BodyBuilder
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = DB_BENCH_PRESS
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = DIP
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = DUMBBELL_FLY
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 12, weight: 0)
       ls.exercise = TRICEP_PUSHDOWN
-      ls.save
+      
       workout.lift_sets << ls
     end
 
-    workout.save
+    
     return workout
 
   end
@@ -116,7 +116,7 @@ class Wendler531BodyBuilder
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_ohp * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = OHP_EXERCISE
-      ls.save
+      
 
       workout.lift_sets << ls
     end
@@ -124,32 +124,32 @@ class Wendler531BodyBuilder
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = UPRIGHT_ROW_EXERCISE
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 12, weight: 0)
       ls.exercise = DB_MILITARY_PRESS
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 15, weight: 0)
       ls.exercise = DB_BENT_RAISE
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 12, weight: 0)
       ls.exercise = DB_CURL
-      ls.save
+      
       workout.lift_sets << ls
     end
 
-    workout.save
+    
     return workout
 
   end
@@ -164,7 +164,7 @@ class Wendler531BodyBuilder
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_deadlift * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = DEADLIFT_EXERCISE
-      ls.save
+      
 
       workout.lift_sets << ls
     end
@@ -172,32 +172,32 @@ class Wendler531BodyBuilder
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = CHIN_EXERCISE
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 15, weight: 0)
       ls.exercise = DB_ROW
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 25, weight: 0)
       ls.exercise = BACK_EXTENSION
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 15, weight: 0)
       ls.exercise = AB_WHEEL
-      ls.save
+      
       workout.lift_sets << ls
     end
 
-    workout.save
+    
     return workout
 
   end
@@ -212,7 +212,7 @@ class Wendler531BodyBuilder
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_squat * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = SQUAT_EXERCISE
-      ls.save
+      
 
       workout.lift_sets << ls
     end
@@ -220,32 +220,32 @@ class Wendler531BodyBuilder
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 12, weight: 0)
       ls.exercise = LEG_PRESS
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 12, weight: 0)
       ls.exercise = LEG_EXTENSION
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 12, weight: 0)
       ls.exercise = LEGCURL_EXERCISE
-      ls.save
+      
       workout.lift_sets << ls
     end
 
     (0..3).each do |sets|
       ls = LiftSet.new(reps: 25, weight: 0)
       ls.exercise = SIT_UP
-      ls.save
+      
       workout.lift_sets << ls
     end
 
-    workout.save
+    
     return workout
 
   end
