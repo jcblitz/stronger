@@ -24,5 +24,30 @@ describe LiftSet do
       ls.weight.should eq (210)
     end
   end
+  describe "plates" do
+    it "returns [] for 45" do
+      ls = LiftSet.new(weight: 45)
+      ls.plates.should eq([])
+    end
+    it "returns [45] for 135" do
+      ls = LiftSet.new(weight: 135)
+      ls.plates.should eq([45])
+    end
 
+    it "returns [45, 45, 45] for 315" do
+      ls = LiftSet.new(weight: 135)
+      ls.plates.should eq([45])
+    end
+
+    it "returns [45, 45, 45] for 315" do
+      ls = LiftSet.new(weight: 135)
+      ls.plates.should eq([45])
+    end
+
+    # Uses the least amount of plates
+    it "returns [45, 45, 25, 5, 2.5] for 290" do
+      ls = LiftSet.new(weight: 290)
+      ls.plates.should eq([45, 45, 25, 5, 2.5])
+    end
+  end
 end
