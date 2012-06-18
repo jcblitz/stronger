@@ -12,6 +12,7 @@ describe "Wendler531Bbb" do
       cycle = Cycle.new(max_deadlift: 500, max_squat: 400, max_bench: 300, max_ohp: 200, user: user)
       program = Wendler531Bbb.new(cycle)
       cycle = program.generate
+      cycle.save!
 
       cycle.workouts.count.should eq 16
     end

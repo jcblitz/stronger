@@ -33,7 +33,6 @@ class Wendler531Bbb
   end
 
   def generate
-
     (0..3).each do |micro_cycle|
       @cycle.workouts << build_bench(micro_cycle)
       @cycle.workouts << build_ohp(micro_cycle)
@@ -56,7 +55,7 @@ class Wendler531Bbb
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_bench * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = BENCH_EXERCISE
-      ls.save
+
 
       workout.lift_sets << ls
     end
@@ -64,11 +63,11 @@ class Wendler531Bbb
     (0..4).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = DUMBBELL_ROW_EXERCISE
-      ls.save
+
       workout.lift_sets << ls
     end
 
-    workout.save
+
     return workout
 
   end
@@ -83,7 +82,7 @@ class Wendler531Bbb
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_ohp * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = OHP_EXERCISE
-      ls.save
+
 
       bench_workout.lift_sets << ls
     end
@@ -91,11 +90,11 @@ class Wendler531Bbb
     (0..4).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = CHIN_EXERCISE
-      ls.save
+
       bench_workout.lift_sets << ls
     end
 
-    bench_workout.save
+
     return bench_workout
 
   end
@@ -110,7 +109,7 @@ class Wendler531Bbb
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_deadlift * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = DEADLIFT_EXERCISE
-      ls.save
+
 
       workout.lift_sets << ls
     end
@@ -118,11 +117,11 @@ class Wendler531Bbb
     (0..4).each do |sets|
       ls = LiftSet.new(reps: 15, weight: 0)
       ls.exercise = HLR_EXERCISE
-      ls.save
+
       workout.lift_sets << ls
     end
 
-    workout.save
+
     return workout
 
   end
@@ -137,7 +136,7 @@ class Wendler531Bbb
 
       ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_squat * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = SQUAT_EXERCISE
-      ls.save
+
 
       workout.lift_sets << ls
     end
@@ -145,11 +144,11 @@ class Wendler531Bbb
     (0..4).each do |sets|
       ls = LiftSet.new(reps: 10, weight: 0)
       ls.exercise = HLR_EXERCISE
-      ls.save
+
       workout.lift_sets << ls
     end
 
-    workout.save
+
     return workout
 
   end
