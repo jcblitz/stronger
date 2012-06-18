@@ -3,6 +3,9 @@ require "wendler_531_bbb"
 require "wendler_531_body_builder"
 
 class CyclesController < ApplicationController
+  before_filter :authenticate_user!, :except => [:show, :index]
+  load_and_authorize_resource
+
   # GET /cycles
   # GET /cycles.json
   def index
@@ -29,6 +32,7 @@ class CyclesController < ApplicationController
   # GET /cycles/new.json
   def new
     @cycle = Cycle.new
+    @cycle.user = User.find(params[:user_id])
 
     respond_to do |format|
       format.html # new.html.erb

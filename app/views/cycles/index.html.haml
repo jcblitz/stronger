@@ -18,10 +18,10 @@
       %td= cycle.max_deadlift
       %td= cycle.max_ohp
       %td= cycle.user.name
-      %td= link_to 'Show', user_cycle_path(current_user, cycle)
-      %td= link_to 'Edit', edit_user_cycle_path(current_user, cycle)
-      %td= link_to 'Destroy', user_cycle_path(current_user, cycle), :confirm => 'Are you sure?', :method => :delete
+      %td= link_to 'Show', user_cycle_path(cycle.user, cycle)
+      %td= link_to 'Edit', edit_user_cycle_path(cycle.user, cycle)
+      %td= link_to 'Destroy', user_cycle_path(cycle.user, cycle), :confirm => 'Are you sure?', :method => :delete
 
 %br
 
-= link_to 'New Cycle', new_user_cycle_path
+= link_to 'New Cycle', new_user_cycle_path if (can? :create, Cycle)
