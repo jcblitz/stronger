@@ -27,6 +27,6 @@
 
 
 
-= link_to 'Edit', edit_user_cycle_path(@cycle)
+= link_to 'Edit', edit_user_cycle_path(@cycle.user, @cycle) if (can? :edit, Cycle)
 \|
-= link_to 'Back', user_cycles_path
+= link_to 'Back', user_cycles_path(@cycle.user)

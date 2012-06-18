@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', user_cycle_path(current_user, @cycle)
+= link_to 'Show', user_cycle_path(@cycle.user, @cycle)
 \|
-= link_to 'Back', user_cycles_path(current_user)
+= link_to 'Back', user_cycles_path(@cycle.user)

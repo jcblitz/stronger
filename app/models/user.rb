@@ -11,7 +11,12 @@ class User < ActiveRecord::Base
          user.name = auth['info']['name'] || ""
          user.email = auth['info']['email'] || ""
       end
+      user.add_role :regular
     end
+  end
+
+  def admin?
+    self.has_role? :admin
   end
 
 end
