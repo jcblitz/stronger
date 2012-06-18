@@ -62,8 +62,8 @@ class CyclesController < ApplicationController
             program = Wendler531BodyBuilder.new(@cycle)
         end
 
-        program.generate
-
+        @cycle = program.generate
+        @cycle.save
 
         format.html { redirect_to user_cycle_path(current_user, @cycle), notice: 'Cycle was successfully created.' }
         format.json { render json: @cycle, status: :created, location: @cycle }

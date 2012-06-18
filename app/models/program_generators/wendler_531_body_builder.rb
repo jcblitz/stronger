@@ -53,7 +53,7 @@ class Wendler531BodyBuilder
       @cycle.workouts << build_deadlift(micro_cycle)
     end
 
-    @cycle.save
+    return @cycle
 
   end
 
