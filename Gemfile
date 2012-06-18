@@ -54,4 +54,4 @@ gem "simple_form"
 gem "capybara", :group => [:development, :test]
 gem "heroku", :group => :development
 gem "database_cleaner", :group => :test
-gem 'gem activerecord-postgresql-adapter', :group => :production
+gem 'activerecord-postgresql-adapter', :group => :production
