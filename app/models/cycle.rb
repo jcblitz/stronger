@@ -1,4 +1,4 @@
 class Cycle < ActiveRecord::Base
-  belongs_to :user
-  has_many :workouts, :dependent => :destroy,  :autosave => true
+  belongs_to :mesocycle
+  has_many :workouts, :dependent => :destroy, :autosave => true
 end

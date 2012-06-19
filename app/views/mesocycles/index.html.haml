@@ -1,0 +1,27 @@
+%h1 My Mesocycles
+
+%table
+  %tr
+    %th Program
+    %th Bench
+    %th Squat
+    %th Deadlift
+    %th Ohp
+
+    %th
+    %th
+
+  - @mesocycles.each do |mesocycle|
+    %tr
+      %td= link_to(mesocycle.program.name, user_mesocycle_path(1, mesocycle))
+      %td= mesocycle.max_bench
+      %td= mesocycle.max_squat
+      %td= mesocycle.max_deadlift
+      %td= mesocycle.max_ohp
+
+      %td= link_to 'Edit', edit_user_mesocycle_path(1, mesocycle)
+      %td= link_to 'Destroy', user_mesocycle_path(1, mesocycle), :confirm => 'Are you sure?', :method => :delete
+
+%br
+
+= link_to 'New Mesocycle', new_user_mesocycle_path(params[:user_id])

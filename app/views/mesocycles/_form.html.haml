@@ -1,0 +1,12 @@
+= simple_form_for([@mesocycle.user, @mesocycle]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :max_bench
+    = f.input :max_squat
+    = f.input :max_deadlift
+    = f.input :max_ohp
+    = f.association :program
+
+  .form-actions
+    = f.button :submit
