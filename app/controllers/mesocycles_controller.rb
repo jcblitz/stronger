@@ -2,6 +2,9 @@ require "wendler_531_bbb"
 require "wendler_531_body_builder"
 
 class MesocyclesController < ApplicationController
+  before_filter :authenticate_user!, :except => [:show, :index]
+
+
   # GET /mesocycles
   # GET /mesocycles.json
   def index
@@ -30,6 +33,8 @@ class MesocyclesController < ApplicationController
     @mesocycle = Mesocycle.new
     @mesocycle.user = User.find(params[:user_id])
 
+    authorize! :new, @mesocycle
+
     respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @mesocycle }
@@ -39,6 +44,7 @@ class MesocyclesController < ApplicationController
   # GET /mesocycles/1/edit
   def edit
     @mesocycle = Mesocycle.find(params[:id])
+    authorize! :edit, @mesocycle
   end
 
   # POST /mesocycles
@@ -46,6 +52,8 @@ class MesocyclesController < ApplicationController
   def create
     @mesocycle = Mesocycle.new(params[:mesocycle])
     @mesocycle.user = User.find(params[:user_id])
+
+    authorize! :create, @mesocycle
 
     case @mesocycle.program.key
       when "531bbb"
@@ -72,10 +80,22 @@ class MesocyclesController < ApplicationController
   # PUT /mesocycles/1.json
   def update
     @mesocycle = Mesocycle.find(params[:id])
+    authorize! :update, @mesocycle
 
     respond_to do |format|
       if @mesocycle.update_attributes(params[:mesocycle])
-        format.html { redirect_to @mesocycle, notice: 'Mesocycle was successfully updated.' }
+
+        @mesocycle.cycles.delete_all
+        case @mesocycle.program.key
+          when "531bbb"
+            program = Wendler531Bbb.new(@mesocycle)
+          when "531bb"
+            program = Wendler531BodyBuilder.new(@mesocycle)
+        end
+        @mesocycle = program.generate
+        @mesocycle.save
+
+        format.html { redirect_to user_mesocycle_path(@mesocycle.user, @mesocycle), notice: 'Mesocycle was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -88,6 +108,7 @@ class MesocyclesController < ApplicationController
   # DELETE /mesocycles/1.json
   def destroy
     @mesocycle = Mesocycle.find(params[:id])
+    authorize! :delete, @mesocycle
     user = @mesocycle.user
     @mesocycle.destroy
 

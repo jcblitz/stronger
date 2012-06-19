@@ -19,9 +19,9 @@
       %td= mesocycle.max_deadlift
       %td= mesocycle.max_ohp
 
-      %td= link_to 'Edit', edit_user_mesocycle_path(1, mesocycle)
-      %td= link_to 'Destroy', user_mesocycle_path(1, mesocycle), :confirm => 'Are you sure?', :method => :delete
+      %td= link_to 'Edit', edit_user_mesocycle_path(1, mesocycle) if (can? :edit, Mesocycle)
+      %td= link_to('Destroy', user_mesocycle_path(1, mesocycle), :confirm => 'Are you sure?', :method => :delete) if (can? :delete, Mesocycle)
 
 %br
 
-= link_to 'New Mesocycle', new_user_mesocycle_path(params[:user_id])
+= link_to 'New Mesocycle', new_user_mesocycle_path(params[:user_id]) if (can? :create, Mesocycle)

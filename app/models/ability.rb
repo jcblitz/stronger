@@ -8,8 +8,8 @@ class Ability
      if user.admin?
        can :manage, :all
      elsif user.has_role? :regular
-       can :manage, Cycle do |cycle|
-         cycle.user == user
+       can :manage, Mesocycle do |mesocycle|
+         mesocycle.user == user
        end
      else
        can :read, :all

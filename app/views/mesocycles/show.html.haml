@@ -14,6 +14,6 @@
                 = lift_set.plates unless lift_set.plates.empty?
 
 
-= link_to 'Edit', edit_user_mesocycle_path(@mesocycle.user, @mesocycle)
+= link_to 'Edit', edit_user_mesocycle_path(@mesocycle.user, @mesocycle) if (can? :edit, Mesocycle)
 \|
 = link_to 'Back', user_mesocycles_path(@mesocycle.user)

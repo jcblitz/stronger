@@ -2,6 +2,6 @@
 
 = render 'form'
 
-= link_to 'Show', @mesocycle
+= link_to 'Show', user_mesocycle_path(@mesocycle.user, @mesocycle)
 \|
 = link_to 'Back', user_mesocycles_path(@mesocycle.user)
