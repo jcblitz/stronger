@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Key:
+  = @program.key
+%p
+  %b Name:
+  = @program.name
+%p
+  %b Description:
+  = @program.description
+
+= link_to 'Edit', edit_program_path(@program)
+\|
+= link_to 'Back', programs_path

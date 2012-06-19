@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_many :mesocycles
+  has_many :mesocycles, :dependent => :destroy, :autosave => true
 	rolify
   attr_accessible :provider, :uid, :name, :email
 

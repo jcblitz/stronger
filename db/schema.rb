@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120618201507) do
+ActiveRecord::Schema.define(:version => 20120619011103) do
 
   create_table "cycles", :force => true do |t|
     t.datetime "created_at",   :null => false
@@ -47,6 +47,14 @@ ActiveRecord::Schema.define(:version => 20120618201507) do
     t.integer  "max_ohp"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
+  end
+
+  create_table "programs", :force => true do |t|
+    t.string   "key"
+    t.string   "name"
+    t.text     "description"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
   create_table "roles", :force => true do |t|

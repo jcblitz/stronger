@@ -1,0 +1,19 @@
+%div.row
+  %div.span12
+    - @mesocycle.cycles.each do |cycle|
+      %h2= cycle.name
+      %div.row
+        - cycle.workouts.each do |workout|
+          %div.span3
+            %h3= workout.title
+            - workout.lift_sets.each do |lift_set|
+              %p
+                = lift_set.reps
+                = lift_set.exercise.name unless lift_set.exercise.nil?
+                = lift_set.weight unless lift_set.weight == 0
+                = lift_set.plates unless lift_set.plates.empty?
+
+
+= link_to 'Edit', edit_user_mesocycle_path(@mesocycle.user, @mesocycle)
+\|
+= link_to 'Back', user_mesocycles_path(@mesocycle.user)

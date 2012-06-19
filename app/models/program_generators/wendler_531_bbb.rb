@@ -28,18 +28,18 @@ class Wendler531Bbb
     "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
   end
 
-  def initialize(deadlift, squat, bench, ohp, user)
-    @mesocycle = Mesocycle.new(max_deadlift: deadlift, max_squat: squat, max_bench: bench, max_ohp: ohp, user: user)
+  def initialize(mesocycle)
+    @mesocycle = mesocycle
   end
 
   def generate
-    (0..3).each do |micro_cycle|
-      cycle = Cycle.new(name: "A cycle")
+    (["Week One", "Week Two", "Week Three", "Deload"]).each_with_index do |title, week|
+      cycle = Cycle.new(name: title)
 
-      cycle.workouts << build_bench(micro_cycle, cycle)
-      cycle.workouts << build_ohp(micro_cycle, cycle)
-      cycle.workouts << build_squat(micro_cycle, cycle)
-      cycle.workouts << build_deadlift(micro_cycle, cycle)
+      cycle.workouts << build_bench(week, cycle)
+      cycle.workouts << build_ohp(week, cycle)
+      cycle.workouts << build_squat(week, cycle)
+      cycle.workouts << build_deadlift(week, cycle)
 
       @mesocycle.cycles << cycle
     end

@@ -1,5 +1,5 @@
 class Wendler531BodyBuilder
-  attr_accessor :cycle
+  attr_accessor :mesocycle
 
   CYCLE_FACTOR = [[["5",0.65],["5",0.75],["5+",0.85]],[["3",0.70],["3",0.80],["3+",0.90]],[["5",0.75],["3",0.85],["1+",0.95]],[["5",0.40],["5",0.50],["5",0.60]]]
   CYCLE_STAGE_REPS = 0
@@ -40,35 +40,38 @@ class Wendler531BodyBuilder
     "http://www.amazon.com/Simplest-Effective-Training-Strength-Edition/dp/B00686OYGQ"
   end
 
-  def initialize(cycle)
-    @cycle = cycle
+  def initialize(mesocycle)
+    @mesocycle = mesocycle
   end
 
   def generate
 
-    (0..3).each do |micro_cycle|
-      @cycle.workouts << build_bench(micro_cycle)
-      @cycle.workouts << build_ohp(micro_cycle)
-      @cycle.workouts << build_squat(micro_cycle)
-      @cycle.workouts << build_deadlift(micro_cycle)
+    (["Week One", "Week Two", "Week Three", "Deload"]).each_with_index do |title, week|
+      cycle = Cycle.new(name: title)
+
+      cycle.workouts << build_bench(week, cycle)
+      cycle.workouts << build_ohp(week, cycle)
+      cycle.workouts << build_squat(week, cycle)
+      cycle.workouts << build_deadlift(week, cycle)
+
+      @mesocycle.cycles << cycle
     end
 
-    return @cycle
+    return @mesocycle
 
   end
 
 
-  def build_bench(week)
+  def build_bench(week, cycle)
 
     workout = Workout.new(title: "Bench Press")
-    workout.cycle = @cycle
+    workout.cycle = cycle
 
     (0..2).each do |stage|
       cycle_stage_config = CYCLE_FACTOR[week][stage]
 
-      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_bench * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@mesocycle.max_bench * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = BENCH_EXERCISE
-      
 
       workout.lift_sets << ls
     end
@@ -106,15 +109,15 @@ class Wendler531BodyBuilder
 
   end
 
-  def build_ohp(week)
+  def build_ohp(week, cycle)
 
     workout = Workout.new(title: "Overhead Press")
-    workout.cycle = @cycle
+    workout.cycle = cycle
 
     (0..2).each do |stage|
       cycle_stage_config = CYCLE_FACTOR[week][stage]
 
-      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_ohp * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@mesocycle.max_ohp * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = OHP_EXERCISE
       
 
@@ -154,15 +157,15 @@ class Wendler531BodyBuilder
 
   end
 
-  def build_deadlift(week)
+  def build_deadlift(week, cycle)
 
     workout = Workout.new(title: "Deadlift")
-    workout.cycle = @cycle
+    workout.cycle = cycle
 
     (0..2).each do |stage|
       cycle_stage_config = CYCLE_FACTOR[week][stage]
 
-      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_deadlift * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@mesocycle.max_deadlift * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = DEADLIFT_EXERCISE
       
 
@@ -202,15 +205,15 @@ class Wendler531BodyBuilder
 
   end
 
-  def build_squat(week)
+  def build_squat(week, cycle)
 
     workout = Workout.new(title: "Squat")
-    workout.cycle = @cycle
+    workout.cycle = cycle
 
     (0..2).each do |stage|
       cycle_stage_config = CYCLE_FACTOR[week][stage]
 
-      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@cycle.max_squat * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
+      ls = LiftSet.new(reps: cycle_stage_config[CYCLE_STAGE_REPS], weight: ((@mesocycle.max_squat * MAX_TRAINING_FACTOR) * cycle_stage_config[CYCLE_STAGE_FACTOR]))
       ls.exercise = SQUAT_EXERCISE
       
 

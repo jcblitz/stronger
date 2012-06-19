@@ -1,0 +1,5 @@
+%nav.subnav.subnav-fixed
+  %ul.nav.nav-pills
+    - if user_signed_in?
+      %li
+        = link_to("My Mesocycles", user_mesocycles_path(current_user))

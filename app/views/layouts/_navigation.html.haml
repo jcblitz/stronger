@@ -2,15 +2,11 @@
 %ul.nav
   - if user_signed_in?
     %li
-      = link_to("Cycles", user_cycles_path(current_user))
+      = link_to("Programs", programs_path)
+%ul.nav.pull-right
+  - if user_signed_in?
     %li
       = link_to("Logout #{current_user.name}", signout_path, :method=>'delete')
   - else
     %li
-      = link_to('Login', signin_path)
-  - if user_signed_in?
-    %li
-      = link_to('Edit account', edit_user_path(current_user))
-  - else
-    %li
-      = link_to('Sign up', signin_path)
+      = link_to('Sign up or Login', signin_path)

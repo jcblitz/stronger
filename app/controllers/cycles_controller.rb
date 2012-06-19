@@ -56,7 +56,7 @@ class CyclesController < ApplicationController
 
         program = nil
         case @cycle.program_type
-          when "bbb"
+          when "531bbb"
             program = Wendler531Bbb.new(@cycle)
           when "531bb"
             program = Wendler531BodyBuilder.new(@cycle)

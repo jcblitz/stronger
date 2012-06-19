@@ -9,7 +9,9 @@ describe "Wendler531Bbb" do
 
       user = create(:user)
 
-      program = Wendler531Bbb.new(500, 400, 300, 200, user)
+      mesocycle = Mesocycle.new(max_deadlift: 500, max_squat: 400, max_bench: 300, max_ohp: 200, user: user)
+
+      program = Wendler531Bbb.new(mesocycle)
       mesocycle = program.generate
       mesocycle.save!
 
@@ -22,16 +24,12 @@ describe "Wendler531Bbb" do
 
       user = create(:user)
 
-      program = Wendler531Bbb.new(500, 400, 300, 200, user)
+      mesocycle = Mesocycle.new(max_deadlift: 500, max_squat: 400, max_bench: 300, max_ohp: 200, user: user)
+
+      program = Wendler531Bbb.new(mesocycle)
       mesocycle = program.generate
       mesocycle.save!
 
-      mesocycle.cycles.each do |cycle|
-        puts "Name: #{cycle.name}\n"
-
-
-
-      end
     end
   end
 end
