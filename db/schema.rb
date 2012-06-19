@@ -11,17 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120617020127) do
+ActiveRecord::Schema.define(:version => 20120618201507) do
 
   create_table "cycles", :force => true do |t|
-    t.integer  "max_bench"
-    t.integer  "max_squat"
-    t.integer  "max_deadlift"
-    t.integer  "max_ohp"
-    t.integer  "user_id"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.string   "program_type"
+    t.integer  "mesocycle_id"
+    t.integer  "program_id"
+    t.string   "name"
   end
 
   create_table "exercises", :force => true do |t|
@@ -38,6 +36,17 @@ ActiveRecord::Schema.define(:version => 20120617020127) do
     t.integer  "weight"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+  end
+
+  create_table "mesocycles", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "program_id"
+    t.integer  "max_bench"
+    t.integer  "max_squat"
+    t.integer  "max_deadlift"
+    t.integer  "max_ohp"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
   end
 
   create_table "roles", :force => true do |t|

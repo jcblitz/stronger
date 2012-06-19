@@ -9,12 +9,29 @@ describe "Wendler531Bbb" do
 
       user = create(:user)
 
-      cycle = Cycle.new(max_deadlift: 500, max_squat: 400, max_bench: 300, max_ohp: 200, user: user)
-      program = Wendler531Bbb.new(cycle)
-      cycle = program.generate
-      cycle.save!
+      program = Wendler531Bbb.new(500, 400, 300, 200, user)
+      mesocycle = program.generate
+      mesocycle.save!
 
-      cycle.workouts.count.should eq 16
+      mesocycle.cycles.count.should eq 4
+    end
+
+    it "prints a workout" do
+      # TODO Is this needed?
+      load "#{Rails.root}/db/seeds.rb"
+
+      user = create(:user)
+
+      program = Wendler531Bbb.new(500, 400, 300, 200, user)
+      mesocycle = program.generate
+      mesocycle.save!
+
+      mesocycle.cycles.each do |cycle|
+        puts "Name: #{cycle.name}\n"
+
+
+
+      end
     end
   end
 end
