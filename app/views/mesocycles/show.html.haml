@@ -2,16 +2,20 @@
   %div.span12
     - @mesocycle.cycles.each do |cycle|
       %h2= cycle.name
-      %div.row
+      %div{:class => "row cycle #{cycle.completed? ? "completed" : "open"}", :id => "cycle_#{cycle.id}"}
         - cycle.workouts.each do |workout|
-          %div.span3
-            %h3= workout.title
-            - workout.lift_sets.each do |lift_set|
-              %p
-                = lift_set.reps
-                = lift_set.exercise.name unless lift_set.exercise.nil?
-                = lift_set.weight unless lift_set.weight == 0
-                = lift_set.plates unless lift_set.plates.empty?
+          %div.span3{:class => workout.completed? ? "completed" : "open"}
+            %h3.workout
+              = link_to(workout.title, toggle_workout_user_mesocycle_path(@mesocycle.user.id, @mesocycle.id, workout.id))
+              - if workout.completed?
+                %i.icon-ok-sign.icon-white
+            %ul
+              - workout.lift_sets.each do |lift_set|
+                %li{:class => lift_set.exercise.key}
+                  = lift_set.reps
+                  = lift_set.exercise.name unless lift_set.exercise.nil?
+                  = lift_set.weight unless lift_set.weight == 0
+                  = lift_set.plates unless lift_set.plates.empty?
 
 
 = link_to 'Edit', edit_user_mesocycle_path(@mesocycle.user, @mesocycle) if (can? :edit, Mesocycle)

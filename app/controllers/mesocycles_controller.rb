@@ -4,6 +4,23 @@ require "wendler_531_body_builder"
 class MesocyclesController < ApplicationController
   before_filter :authenticate_user!, :except => [:show, :index]
 
+  def toggle_workout
+    workout = Workout.find(params[:workout_id])
+    authorize! :update, workout
+
+    if workout.completed?
+      workout.completed = false
+    else
+      workout.completed = true
+    end
+
+    respond_to do |format|
+      if workout.save
+      format.html { redirect_to user_mesocycle_path(workout.cycle.mesocycle.user, workout.cycle.mesocycle) }
+      format.json { render json: workout }
+    end
+        end
+  end
 
   # GET /mesocycles
   # GET /mesocycles.json

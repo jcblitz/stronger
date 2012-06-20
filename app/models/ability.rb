@@ -11,6 +11,9 @@ class Ability
        can :manage, Mesocycle do |mesocycle|
          mesocycle.user == user
        end
+       can :manage, Workout do |workout|
+         workout.cycle.mesocycle.user = user
+       end
      else
        can :read, :all
      end

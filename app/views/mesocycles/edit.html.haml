@@ -1,5 +1,10 @@
 %h1 Editing mesocycle
 
+%div.alert.alert-error
+  %h4 Warning
+  %p
+    If you edit your mesocycle, all previous progress in the mesocycle will be reset.
+
 = render 'form'
 
 = link_to 'Show', user_mesocycle_path(@mesocycle.user, @mesocycle)

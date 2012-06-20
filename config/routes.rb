@@ -1,13 +1,14 @@
 Stronger::Application.routes.draw do
-
-
-
   resources :programs
 
   get "home/index"
 
   resources :users, :only => [ :show, :edit, :update ] do
-    resources :mesocycles
+    resources :mesocycles do
+      member do
+        match '/toggle_workout/:workout_id' => 'mesocycles#toggle_workout', :as => :toggle_workout
+      end
+    end
   end
 
   match '/auth/:provider/callback' => 'sessions#create'
