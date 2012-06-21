@@ -34,9 +34,18 @@
                       - else
                         = render :partial => "lift_set", :locals => { :lift_set => lift_set }
                         - if lift_set.note
-                          %i.icon-list-alt.icon-white
+                          %a{"data-toggle" => :modal, :href => "#note_#{lift_set.id}" }
+                            %i.icon-list-alt.icon-white
                         %div.note.modal.hide{:id => "note_#{lift_set.id}"}
-                          = render :partial => "lift_set/note", :locals => { :lift_set => lift_set }
+                          .modal-header
+                            %button.close{"data-dismiss" => "modal", :type => "button"} ×
+                            %h3 Lift Set note
+                          .modal-body
+                            %p= lift_set.note
+                          .modal-footer
+                            %a.btn{"data-dismiss" => "modal", :href => "#"} Close
+
+
 = link_to 'Edit', edit_user_mesocycle_path(@mesocycle.user, @mesocycle) if (can? :edit, Mesocycle)
 \|
 = link_to 'Back', user_mesocycles_path(@mesocycle.user)
