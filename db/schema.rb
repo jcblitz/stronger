@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120619011103) do
+ActiveRecord::Schema.define(:version => 20120620182407) do
 
   create_table "cycles", :force => true do |t|
     t.datetime "created_at",   :null => false
@@ -36,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20120619011103) do
     t.integer  "weight"
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
+    t.string   "note"
   end
 
   create_table "mesocycles", :force => true do |t|

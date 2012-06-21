@@ -14,6 +14,9 @@ class Ability
        can :manage, Workout do |workout|
          workout.cycle.mesocycle.user = user
        end
+       can :manage, LiftSet do |lift_set|
+         true
+       end
      else
        can :read, :all
      end

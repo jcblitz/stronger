@@ -1,3 +1,13 @@
+#myModal.modal.hide
+  .modal-header
+    %button.close{"data-dismiss" => "modal", :type => "button"} ×
+    %h3 Modal header
+  .modal-body
+    %p One fine body…
+  .modal-footer
+    %a.btn{"data-dismiss" => "modal", :href => "#"} Close
+    %a.btn.btn-primary{:href => "#"} Save changes
+
 %div.row
   %div.span12
     - @mesocycle.cycles.each do |cycle|
@@ -13,13 +23,20 @@
                     %i.icon-ok-sign.icon-white
                 %ul
                   - workout.lift_sets.each do |lift_set|
-                    %li{:class => lift_set.exercise.key}
-                      = lift_set.reps
-                      = lift_set.exercise.name unless lift_set.exercise.nil?
-                      = lift_set.weight unless lift_set.weight == 0
-                      = lift_set.plates unless lift_set.plates.empty?
-
-
+                    %li{:class => "#{lift_set.exercise.key}"}
+                      - if can? :update, @mesocycle
+                        %a.noteable{"data-toggle" => :modal, :href => "#note_#{lift_set.id}" }
+                          = render :partial => "lift_set", :locals => { :lift_set => lift_set }
+                          - if lift_set.note
+                            %i.icon-list-alt.icon-white
+                        %div.note.modal.hide{:id => "note_#{lift_set.id}"}
+                          = render :partial => "lift_set/note", :locals => { :lift_set => lift_set }
+                      - else
+                        = render :partial => "lift_set", :locals => { :lift_set => lift_set }
+                        - if lift_set.note
+                          %i.icon-list-alt.icon-white
+                        %div.note.modal.hide{:id => "note_#{lift_set.id}"}
+                          = render :partial => "lift_set/note", :locals => { :lift_set => lift_set }
 = link_to 'Edit', edit_user_mesocycle_path(@mesocycle.user, @mesocycle) if (can? :edit, Mesocycle)
 \|
 = link_to 'Back', user_mesocycles_path(@mesocycle.user)
