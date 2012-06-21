@@ -1,4 +1,6 @@
 Stronger::Application.routes.draw do
+  put "lift_set/update/:id" => 'lift_set#update', :as => :lift_set 
+
   resources :programs
 
   get "home/index"

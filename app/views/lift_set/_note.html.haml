@@ -1,0 +1,10 @@
+= simple_form_for(lift_set) do |f|
+  = f.error_notification
+  .modal-header
+    %h3 Add a note to a set
+  .modal-body
+    .form-inputs
+      = f.input :note
+  .modal-footer
+    = f.button :submit, :class => "btn btn-primary"
+    %a.btn{"data-dismiss" => "modal", :href => "#"} Close
