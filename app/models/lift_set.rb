@@ -2,6 +2,8 @@ class LiftSet < ActiveRecord::Base
   belongs_to :workout
   belongs_to :exercise
 
+  default_scope :order => 'position ASC'
+
   AVAILABLE_PLATES = [45, 35, 25, 10, 5, 2.5]
   EMPTY_BAR_WEIGHT = 45
 

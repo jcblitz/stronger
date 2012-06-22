@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120620182407) do
+ActiveRecord::Schema.define(:version => 20120622003512) do
 
   create_table "cycles", :force => true do |t|
     t.datetime "created_at",   :null => false
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(:version => 20120620182407) do
     t.integer  "mesocycle_id"
     t.integer  "program_id"
     t.string   "name"
+    t.integer  "position"
   end
 
   create_table "exercises", :force => true do |t|
@@ -37,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20120620182407) do
     t.datetime "created_at",  :null => false
     t.datetime "updated_at",  :null => false
     t.string   "note"
+    t.integer  "position"
   end
 
   create_table "mesocycles", :force => true do |t|
@@ -92,6 +94,7 @@ ActiveRecord::Schema.define(:version => 20120620182407) do
     t.datetime "completed_date"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
+    t.integer  "position"
   end
 
 end
