@@ -1,4 +1,6 @@
 Stronger::Application.routes.draw do
+  match "/workout/:id" => "workout#show", :as => :workout
+
   put "lift_set/update/:id" => 'lift_set#update', :as => :lift_set 
 
   resources :programs
