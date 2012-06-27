@@ -9,9 +9,11 @@ class MesocyclesController < ApplicationController
     authorize! :update, workout
 
     if workout.completed?
-      workout.completed = false
+      workout.status = nil
+      workout.completed_date = nil
     else
-      workout.completed = true
+      workout.status = Status::COMPLETE
+      workout.completed_date = Time.now
     end
 
     respond_to do |format|

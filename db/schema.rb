@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120622003512) do
+ActiveRecord::Schema.define(:version => 20120625145228) do
 
   create_table "cycles", :force => true do |t|
     t.datetime "created_at",   :null => false
@@ -90,11 +90,11 @@ ActiveRecord::Schema.define(:version => 20120622003512) do
   create_table "workouts", :force => true do |t|
     t.integer  "cycle_id"
     t.string   "title"
-    t.boolean  "completed"
     t.datetime "completed_date"
     t.datetime "created_at",     :null => false
     t.datetime "updated_at",     :null => false
     t.integer  "position"
+    t.string   "status"
   end
 
 end

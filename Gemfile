@@ -54,3 +54,4 @@ gem "capybara", :group => [:development, :test]
 gem "heroku", :group => :development
 gem "database_cleaner", :group => :test
 gem 'activerecord-postgresql-adapter', :group => :production
+gem 'RedCloth'
