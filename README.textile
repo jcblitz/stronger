@@ -1,3 +1,19 @@
 h1. Stronger
 
+h2. What is this?
 
+Stronger is a web application to generate and track barbell strength training mesocycles based on popular programs like "5/3/1":http://www.amazon.com/Simplest-Effective-Training-Increase-Strength/dp/0557248299, "StrongLifts 5x5":http://stronglifts.com/, and "Starting Strength":http://startingstrength.wikia.com/wiki/The_Starting_Strength_Novice/Beginner_Programs. 
+
+The only goal of Stronger is to remove the guess work out of whatever program you decide to follow. The guys that created the program have very good reasons for saying what they say, buy and read their material, they're worth it.
+
+h2. Can I contribute?
+
+Holy crap yes! This was just a weekend project because I had an itch that needed scratching, but I think it has use for other people. 
+
+h3. UI
+
+The UI is just the default twitter bootstrap theme. There have been no UX considerations, at all. This web app could use some help.
+
+h3. Program Generators
+
+The programs and housed in stronger / app / models / program_generators / and can be written by anyone. The goal of a program generator is to be an implementation of a program that can produce all of the lift sets that are needed to complete a mesocycle. I've only created the ones I've personally used since writing this application. I'll add more as I change up my routine. 
